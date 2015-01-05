@@ -37,6 +37,11 @@ module Todo
           command_parser.order!(argv)
           options[:command]=argv.shift
           sub_command_parsers[options[:command]].parse!(argv)
+
+          if %w(update delete).include?(options[:command])
+            raise ArgumentError,"#{options[:command]} id not found." if argv.empty?
+            options[:id]=Integer(argv.first)
+          end
         rescue OptionParser::MissingArgument,OptionParser::InvalidOption,ArgumentError=>e
           abort e.message
         end
