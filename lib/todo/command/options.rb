@@ -3,6 +3,28 @@ require 'optparse'
 module Todo
   class Command
     module Options
+      def self.parse!(argv)
+        sub_command_parsers=Hash.new do |k,v|
+          raise ArgumentError,"'#{v}' is not todo sub command."
+        end
+
+        sub_command_parsers{'create'}=OptionParser.new do |opt|
+          opt.on('-n VAL','--name=VAL','task name'){|v| options[:name]=v}
+          opt.on('-c VAL','--content=VAL','task content'){|v| options[:content]=v}
+        end
+
+        command_parser=OptionParser.new do |opt|
+          opt.on_head('-v','--version','Show program version') do |v|
+            opt.version=Todo::VERSION
+            puts opt.ver
+            exit
+          end
+        end
+
+
+
+
+
       def self.create_sub_command_parsers
         sub_command_parsers=Hash.new do |k,v|
           raise ArgumentError,"'#{v}' is not todo sub command."
